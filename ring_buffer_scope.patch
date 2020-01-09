@@ -1,0 +1,17 @@
+--- ptdump-1.0.3/ptdump.c.orig
++++ ptdump-1.0.3/ptdump.c
+@@ -502,6 +502,14 @@ cmd_ptdump(void)
+ 		return;
+ 	}
+ 
++	/* 
++	 * Set the gdb scope to ensure that the appropriate ring_buffer 
++	 * structure is selected. 
++	 */
++	if (kernel_symbol_exists("perf_mmap_to_page"))
++		gdb_set_crash_scope(symbol_value("perf_mmap_to_page"), 
++			"perf_mmap_to_page");
++
+ 	online_cpus = get_cpus_online();
+ 	list_len = sizeof(struct pt_info)*kt->cpus;
+ 	pt_info_list = malloc(list_len);
